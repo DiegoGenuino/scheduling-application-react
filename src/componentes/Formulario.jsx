@@ -27,35 +27,50 @@ export default function Formulario() {
             <div className="container">
                 <aside>
                     <div className="aside-info">
-                    <h1>Preenchimento de formulário com React</h1>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque ab in eligendi, possimus, reiciendis sequi numquam quibusdam fugit quis harum illum error consequuntur rerum officia. Doloribus, hic! Alias, quidem beatae!</p>
-                </div>
+                        <h1>Preenchimento de formulário com React</h1>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque ab in eligendi, possimus, reiciendis sequi numquam quibusdam fugit quis harum illum error consequuntur rerum officia. Doloribus, hic! Alias, quidem beatae!</p>
+                    </div>
                 </aside>
-                <form action="">
+                <form action="" onSubmit={(e) => {
+                    e.preventDefault();
+                }}>
                     <h2>Formulário</h2>
-                    <div className="inputGroup">
-                        <label htmlFor="nomeCompleto">Nome completo</label>
-                        <input type="text" id="nomeCompleto" placeholder="João Soares"
-                            value={formData.nomeCompleto}
-                            onChange={handleChange}
-                        />
+
+                    <div className="inline-inputGroup">
+
+                        <div className="inputGroup">
+                            <label htmlFor="nomeCompleto">Nome completo</label>
+                            <input
+                                type="text"
+                                id="nomeCompleto"
+                                placeholder="João Soares"
+                                minLength={5}
+                                required
+                                name='nomeCompleto'
+                                value={formData.nomeCompleto}
+                                onChange={handleChange}
+                            />
+                          <p className="error">Nome obrigatório</p>
+                        </div>
+
+                        <div className="inputGroup">
+                            <label htmlFor="email">E-mail</label>
+                            <input type="email" id="email" placeholder="joaosoares123@gmail.com"
+                                value={formData.email}
+                                onChange={handleChange}
+                            />
+                        </div>
+
+                        <div className="inputGroup">
+                            <label htmlFor="telefone">Telefone</label>
+                            <input type="text" id="telefone" placeholder="11 99111 1111"
+                                value={formData.telefone}
+                                onChange={handleChange}
+                            />
+                        </div>
                     </div>
 
-                    <div className="inputGroup">
-                        <label htmlFor="email">E-mail</label>
-                        <input type="email" id="email" placeholder="joaosoares123@gmail.com"
-                            value={formData.email}
-                            onChange={handleChange}
-                        />
-                    </div>
-
-                    <div className="inputGroup">
-                        <label htmlFor="telefone">Telefone</label>
-                        <input type="text" id="telefone" placeholder="11 99111 1111"
-                            value={formData.telefone}
-                            onChange={handleChange}
-                        />
-                    </div>
+                               <div className="inline-inputGroup">
 
                     <div className="inputGroup">
                         <label htmlFor="dataConsulta">Data da consulta</label>
@@ -71,6 +86,8 @@ export default function Formulario() {
                             value={formData.horaConsulta}
                             onChange={handleChange}
                         />
+                    </div>
+
                     </div>
 
                     <div className="inputGroup">
