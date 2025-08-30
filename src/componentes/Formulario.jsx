@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useRef, useState, useEffect } from "react";
 
 import "./Formulario.css";
+
 export default function Formulario() {
   const [formData, setFormData] = useState({
     nomeCompleto: "",
@@ -10,47 +11,56 @@ export default function Formulario() {
     horaConsulta: "",
     especialidadeDesejada: "",
     observacoes: "",
-    butaoConfirmar: "",
   });
 
   const [loading, setLoading] = useState(false);
+  const timeoutRef = useRef(null);
 
   const handleChange = (evento) => {
     const { name, value } = evento.target;
 
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
-
-    setTimeout(() => {
+    // simula envio e apaga o loading depois de 2s
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => {
       setLoading(false);
-    }, 4000);
+    }, 2000);
   }
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
+
+  const specialties = [
+    "Cirurgia Geral",
+    "Cardiologia",
+    "Neurologia",
+  ];
 
   return (
     <>
       <div className="container">
         <aside>
           <div className="aside-info">
-            <h1>Preenchimento de formulário com React</h1>
+            <h1>Agende sua consulta em segundos</h1>
+            <p>Interface simples. Experiência rápida. Confiança no agendamento</p>
             <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque ab
-              in eligendi, possimus, reiciendis sequi numquam quibusdam fugit
-              quis harum illum error consequuntur rerum officia. Doloribus, hic!
-              Alias, quidem beatae!
+              Preencha seus dados de forma rápida e segura. Nossa plataforma
+              valida e confirma seu agendamento por e-mail.
             </p>
           </div>
         </aside>
         <form onSubmit={handleSubmit}>
           {loading && (
             <div className="loading-state" role="status">
-              <div className="animation"></div>
+              <div className="animation" />
             </div>
           )}
           <h2>Formulário</h2>
@@ -82,7 +92,7 @@ export default function Formulario() {
                 value={formData.email}
                 onChange={handleChange}
               />
-              <p className="error">Nome obrigatório</p>
+              <p className="error">Digite um e-mail válido</p>
             </div>
 
             <div className="inputGroup">
@@ -96,7 +106,7 @@ export default function Formulario() {
                 value={formData.telefone}
                 onChange={handleChange}
               />
-              <p className="error">Nome obrigatório</p>
+              <p className="error">Telefone obrigatório</p>
             </div>
           </div>
 
@@ -106,27 +116,25 @@ export default function Formulario() {
               <input
                 type="date"
                 id="dataConsulta"
-                placeholder="01/01/2025"
                 required
                 name="dataConsulta"
                 value={formData.dataConsulta}
                 onChange={handleChange}
               />
-              <p className="error">Nome obrigatório</p>
+              <p className="error">Data obrigatória</p>
             </div>
 
             <div className="inputGroup">
               <label htmlFor="horaConsulta">Hora da consulta</label>
               <input
-                type="date-time"
+                type="time"
                 id="horaConsulta"
-                placeholder="12:00"
                 required
                 name="horaConsulta"
                 value={formData.horaConsulta}
                 onChange={handleChange}
               />
-              <p className="error">Nome obrigatório</p>
+              <p className="error">Hora obrigatória</p>
             </div>
           </div>
 
@@ -134,36 +142,36 @@ export default function Formulario() {
             <div className="inputGroup">
               <label htmlFor="especialidade">Especialidade</label>
               <select
-                name="especialidades"
                 id="especialidade"
                 value={formData.especialidadeDesejada}
                 required
                 name="especialidadeDesejada"
                 onChange={handleChange}
               >
-                <option value="" selected disabled>Selecione uma opção</option>
-                <option value="Cirurgia Geral">Cirurgia Geral</option>
-                <option value="Cardiologia">Cardiologia</option>
-                <option value="Neurologia">Neurologia</option>
+                <option value="">Selecione uma opção</option>
+                {specialties.map((s) => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))}
               </select>
-              <p className="error">Nome obrigatório</p>
+              <p className="error">Especialidade obrigatória</p>
             </div>
 
             <div className="inputGroup">
               <label htmlFor="observacoes">Observações</label>
               <textarea
-                name="obervacoes"
+                name="observacoes"
                 id="observacoes"
                 placeholder="Desejo..."
-                name="observacoes"
                 value={formData.observacoes}
                 onChange={handleChange}
               ></textarea>
-              <p className="error">Nome obrigatório</p>
+              <p className="error">Observação obrigatória</p>
             </div>
           </div>
 
-          <button>Confirmar agendamento</button>
+          <button disabled={loading}>{loading ? "Enviando..." : "Agendar"}</button>
         </form>
       </div>
     </>
